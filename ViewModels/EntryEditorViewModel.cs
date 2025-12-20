@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using SecureDailyJournal.Models;
 using SecureDailyJournal.Services;
 using Markdig;
+using System.Collections.ObjectModel;
 
 namespace SecureDailyJournal.ViewModels
 {

@@ -5,6 +5,10 @@
              x:Class="SecureDailyJournal.Views.EntryEditorPage"
              Title="Edit Entry">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
+    </ContentPage.ToolbarItems>
+
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" Padding="10" RowSpacing="10" ColumnSpacing="10">
         
         <!-- Header Controls -->
@@ -58,11 +62,6 @@
             <Label TextType="Html" Text="{Binding HtmlPreview}" />
         </ScrollView>
         
-        <!-- Toolbar Items -->
-        <ContentPage.ToolbarItems>
-            <ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
-        </ContentPage.ToolbarItems>
-
     </Grid>
 
 </ContentPage>

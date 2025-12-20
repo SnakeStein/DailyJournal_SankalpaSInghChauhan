@@ -57,7 +57,7 @@ namespace SecureDailyJournal.Services
             // In SQL: WHERE EntryDate >= start AND EntryDate <= end
             // Since EntryDate is DateTime in C#, we need to be careful with comparison if ticks are used.
             // But usually this works:
-            var all = await _databaseService.GetAllEntriesAsync(); // Or add filter in DB service
+            var all = await _databaseService.GetEntriesAsync(); // Or add filter in DB service
             // Better to filter in memory if list is small, or add specific query in DB service. 
             // Given "Individual Project" size, memory filter is fine for < 3650 entries (10 years).
             
@@ -75,5 +75,10 @@ namespace SecureDailyJournal.Services
             var entry = await GetEntryForDateAsync(date);
             return entry != null;
         }
+        public async Task SaveTagsForEntryAsync(int entryId, List<string> tags)
+        {
+            await _databaseService.SaveTagsForEntryAsync(entryId, tags);
+        }
+        
     }
 }

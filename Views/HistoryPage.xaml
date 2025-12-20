@@ -27,7 +27,7 @@
         </VerticalStackLayout>
 
         <!-- Entries List -->
-        <CollectionView Grid.Row="1" ItemsSource="{Binding FilteredEntries}" Padding="10">
+        <CollectionView Grid.Row="1" ItemsSource="{Binding FilteredEntries}">
             <CollectionView.EmptyView>
                 <Label Text="No entries found" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0"/>
             </CollectionView.EmptyView>

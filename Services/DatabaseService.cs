@@ -11,7 +11,7 @@ namespace SecureDailyJournal.Services
         {
         }
 
-        private async Task Init()
+        public async Task Init()
         {
             if (_database is not null)
                 return;

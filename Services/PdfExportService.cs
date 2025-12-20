@@ -2,6 +2,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using SecureDailyJournal.Models;
+using PdfColors = QuestPDF.Helpers.Colors;
 
 namespace SecureDailyJournal.Services
 {
@@ -33,7 +34,7 @@ namespace SecureDailyJournal.Services
                     
                     page.Header()
                         .Text($"Journal Entries: {start:D} - {end:D}")
-                        .SemiBold().FontSize(20).FontColor(Colors.Blue.Medium);
+                        .SemiBold().FontSize(20).FontColor(PdfColors.Blue.Medium);
 
                     page.Content()
                         .PaddingVertical(1, Unit.Centimetre)
@@ -46,7 +47,7 @@ namespace SecureDailyJournal.Services
                                     item.Item().Text($"{entry.EntryDate:D} - {entry.Title}").Bold().FontSize(14);
                                     item.Item().Text($"Mood: {entry.PrimaryMood}").Italic().FontSize(10);
                                     item.Item().PaddingTop(5).Text(entry.Content).FontSize(12);
-                                    item.Item().LineHorizontal(1).LineColor(Colors.Grey.Lighten2);
+                                    item.Item().LineHorizontal(1).LineColor(PdfColors.Grey.Lighten2);
                                 });
                             }
                         });

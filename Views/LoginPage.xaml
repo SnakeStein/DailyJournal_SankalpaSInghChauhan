@@ -15,6 +15,12 @@
                    HorizontalOptions="Center"
                    TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
             
+            <Label Text="ENTER PIN" 
+                   FontSize="16" 
+                   TextColor="Gray" 
+                   HorizontalOptions="Center"
+                   CharacterSpacing="2"/>
+
             <Label Text="{Binding StatusMessage}" 
                    FontSize="16" 
                    TextColor="Gray" 
@@ -24,7 +30,7 @@
                    FontSize="40" 
                    HorizontalOptions="Center" 
                    TextColor="{AppThemeBinding Light=#4B5563, Dark=#9CA3AF}"
-                   LetterSpacing="10">
+                   CharacterSpacing="10">
                 <Label.Triggers>
                     <DataTrigger TargetType="Label" Binding="{Binding Pin.Length}" Value="0">
                         <Setter Property="Text" Value="____" />
