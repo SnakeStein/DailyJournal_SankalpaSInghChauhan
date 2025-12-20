@@ -111,5 +111,43 @@ namespace SecureDailyJournal.Services
             await Init();
             return await _database.Table<Mood>().ToListAsync();
         }
+
+        public async Task<List<Tag>> GetAllTagsAsync()
+        {
+            await Init();
+            return await _database.Table<Tag>().ToListAsync();
+        }
+        
+       public async Task<List<Tag>> GetTagsForEntryAsync(int entryId)
+        {
+            await Init();
+            // Manual join
+            var entryTags = await _database.Table<EntryTag>().Where(et => et.EntryId == entryId).ToListAsync();
+            var tagIds = entryTags.Select(et => et.TagId).ToList();
+            
+            // Not efficient for large sets in sqlite-net-pcl without raw query, but fine here
+            var allTags = await _database.Table<Tag>().ToListAsync();
+            return allTags.Where(t => tagIds.Contains(t.Id)).ToList();
+        }
+
+        public async Task SaveTagsForEntryAsync(int entryId, List<string> tagNames)
+        {
+            await Init();
+            // Clear existing
+            var existingMap = await _database.Table<EntryTag>().Where(et => et.EntryId == entryId).ToListAsync();
+            foreach(var map in existingMap) await _database.DeleteAsync(map);
+
+            foreach (var tagName in tagNames)
+            {
+                var tag = await _database.Table<Tag>().Where(t => t.Name == tagName).FirstOrDefaultAsync();
+                if (tag == null)
+                {
+                    tag = new Tag { Name = tagName };
+                    await _database.InsertAsync(tag);
+                }
+                
+                await _database.InsertAsync(new EntryTag { EntryId = entryId, TagId = tag.Id });
+            }
+        }
     }
 }

@@ -29,9 +29,22 @@ namespace SecureDailyJournal.ViewModels
 
         [ObservableProperty]
         private string _selectedMoodName;
+
+        [ObservableProperty]
+        private string _secondaryMood1;
+
+        [ObservableProperty]
+        private string _secondaryMood2;
         
         [ObservableProperty]
         private List<string> _moodValues = new();
+
+        [ObservableProperty]
+        private string _newTag = "";
+
+        // Simple string list for now, or could refer to Tag objects
+        public ObservableCollection<string> SelectedTags { get; } = new();
+        public ObservableCollection<string> AvailableTags { get; } = new();
 
         private JournalEntry _currentEntry;
 
@@ -46,6 +59,31 @@ namespace SecureDailyJournal.ViewModels
         {
             var moods = await _databaseService.GetMoodsAsync();
             MoodValues = moods.Select(m => m.Name).ToList();
+
+            // Load Tags
+            var tags = await _databaseService.GetAllTagsAsync(); // Need to implement
+            AvailableTags.Clear();
+            foreach (var t in tags) AvailableTags.Add(t.Name);
+        }
+
+        [RelayCommand]
+        public async Task AddTag()
+        {
+            if (string.IsNullOrWhiteSpace(NewTag)) return;
+            var tag = NewTag.Trim();
+            if (!SelectedTags.Contains(tag))
+            {
+                SelectedTags.Add(tag);
+                // Also ensure it exists in DB later or add to available
+                if (!AvailableTags.Contains(tag)) AvailableTags.Add(tag);
+            }
+            NewTag = "";
+        }
+
+        [RelayCommand]
+        public void RemoveTag(string tag)
+        {
+            if (SelectedTags.Contains(tag)) SelectedTags.Remove(tag);
         }
 
         async partial void OnEntryIdChanged(int value)
@@ -73,12 +111,31 @@ namespace SecureDailyJournal.ViewModels
             LoadEntry(entry);
         }
 
-        private void LoadEntry(JournalEntry entry)
+        private async void LoadEntry(JournalEntry entry)
         {
             Title = entry.Title;
             Content = entry.Content;
             EntryDate = entry.EntryDate;
             SelectedMoodName = entry.PrimaryMood;
+            
+            // Parse secondary moods
+            if (!string.IsNullOrEmpty(entry.SecondaryMoods))
+            {
+                var parts = entry.SecondaryMoods.Split(',');
+                if (parts.Length > 0) SecondaryMood1 = parts[0];
+                if (parts.Length > 1) SecondaryMood2 = parts[1];
+            }
+            else
+            {
+                SecondaryMood1 = null;
+                SecondaryMood2 = null;
+            }
+
+            // Load tags for this entry
+            SelectedTags.Clear();
+            var tags = await _databaseService.GetTagsForEntryAsync(entry.Id); // Need implementation
+            foreach (var t in tags) SelectedTags.Add(t.Name);
+
             UpdatePreview();
         }
 
@@ -102,7 +159,16 @@ namespace SecureDailyJournal.ViewModels
             _currentEntry.Content = Content;
             _currentEntry.PrimaryMood = SelectedMoodName;
             
+            var sec = new List<string>();
+            if (!string.IsNullOrEmpty(SecondaryMood1)) sec.Add(SecondaryMood1);
+            if (!string.IsNullOrEmpty(SecondaryMood2)) sec.Add(SecondaryMood2);
+            _currentEntry.SecondaryMoods = string.Join(",", sec);
+
             await _journalService.SaveEntryAsync(_currentEntry);
+            
+            // Save Tags
+            await _journalService.SaveTagsForEntryAsync(_currentEntry.Id, SelectedTags.ToList());
+
             await Shell.Current.GoToAsync("..");
         }
 

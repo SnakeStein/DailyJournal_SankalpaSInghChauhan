@@ -8,13 +8,42 @@
     <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" Padding="10" RowSpacing="10" ColumnSpacing="10">
         
         <!-- Header Controls -->
-        <VerticalStackLayout Grid.ColumnSpan="2" Spacing="5">
+        <VerticalStackLayout Grid.ColumnSpan="2" Spacing="10">
             <Label Text="{Binding EntryDate, StringFormat='{0:D}'}" FontSize="18" TextColor="Gray"/>
             <Entry Placeholder="Title" Text="{Binding Title}" FontSize="20" FontAttributes="Bold"/>
             
-            <Picker Title="Select Mood" 
-                    ItemsSource="{Binding MoodValues}" 
-                    SelectedItem="{Binding SelectedMoodName}"/>
+            <Grid ColumnDefinitions="*,*,*">
+                <Picker Title="Primary Mood" ItemsSource="{Binding MoodValues}" SelectedItem="{Binding SelectedMoodName}"/>
+                <Picker Title="Secondary 1" ItemsSource="{Binding MoodValues}" SelectedItem="{Binding SecondaryMood1}" Grid.Column="1"/>
+                <Picker Title="Secondary 2" ItemsSource="{Binding MoodValues}" SelectedItem="{Binding SecondaryMood2}" Grid.Column="2"/>
+            </Grid>
+            
+            <!-- Tagging -->
+            <Grid ColumnDefinitions="*, Auto">
+                <Entry Placeholder="Add Tag" Text="{Binding NewTag}" ReturnCommand="{Binding AddTagCommand}"/>
+                <Button Text="+" Command="{Binding AddTagCommand}" Grid.Column="1" WidthRequest="40"/>
+            </Grid>
+            
+            <CollectionView ItemsSource="{Binding SelectedTags}" HeightRequest="40" SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Horizontal" HorizontalItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                         <Frame Padding="5,2" CornerRadius="5" BackgroundColor="{AppThemeBinding Light=#E5E7EB, Dark=#4B5563}" HasShadow="False">
+                             <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="5">
+                                 <Label Text="{Binding .}" FontSize="12" VerticalOptions="Center"/>
+                                 <Label Text="✕" FontSize="10" TextColor="Red" VerticalOptions="Center" Grid.Column="1">
+                                     <Label.GestureRecognizers>
+                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EntryEditorViewModel}}, Path=RemoveTagCommand}" CommandParameter="{Binding .}"/>
+                                     </Label.GestureRecognizers>
+                                 </Label>
+                             </Grid>
+                         </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
         </VerticalStackLayout>
 
         <!-- Editor (Left) -->
