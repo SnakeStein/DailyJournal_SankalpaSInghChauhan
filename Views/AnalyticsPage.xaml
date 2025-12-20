@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SecureDailyJournal.ViewModels"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
+             x:Class="SecureDailyJournal.Views.AnalyticsPage"
+             Title="Analytics">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"
+                                        xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"/>
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            
+            <!-- Streaks -->
+            <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
+                <Frame BackgroundColor="{AppThemeBinding Light=#BFDBFE, Dark=#1E3A8A}" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout>
+                        <Label Text="🔥 Current Streak" FontSize="14" HorizontalOptions="Center"/>
+                        <Label Text="{Binding CurrentStreak}" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Days" FontSize="12" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+                 <Frame BackgroundColor="{AppThemeBinding Light=#FED7AA, Dark=#7C2D12}" Padding="15" CornerRadius="10" Grid.Column="1">
+                    <VerticalStackLayout>
+                        <Label Text="🏆 Longest Streak" FontSize="14" HorizontalOptions="Center"/>
+                        <Label Text="{Binding LongestStreak}" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center"/>
+                        <Label Text="Days" FontSize="12" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Total Words -->
+             <Frame BackgroundColor="{AppThemeBinding Light=#F3F4F6, Dark=#374151}" Padding="15" CornerRadius="10">
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Total Words Written:" FontSize="16" VerticalOptions="Center"/>
+                    <Label Text="{Binding TotalWords}" FontSize="20" FontAttributes="Bold" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Frame>
+
+            <!-- Mood Chart -->
+            <Label Text="Mood Distribution" FontSize="20" FontAttributes="Bold"/>
+            <Frame HeightRequest="300" Padding="0" CornerRadius="10" IsClippedToBounds="True">
+                <lvc:PieChart Series="{Binding MoodSeries}" LegendPosition="Right" />
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

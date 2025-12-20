@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SecureDailyJournal.ViewModels"
+             x:Class="SecureDailyJournal.Views.EntryEditorPage"
+             Title="Edit Entry">
+
+    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,*" Padding="10" RowSpacing="10" ColumnSpacing="10">
+        
+        <!-- Header Controls -->
+        <VerticalStackLayout Grid.ColumnSpan="2" Spacing="5">
+            <Label Text="{Binding EntryDate, StringFormat='{0:D}'}" FontSize="18" TextColor="Gray"/>
+            <Entry Placeholder="Title" Text="{Binding Title}" FontSize="20" FontAttributes="Bold"/>
+            
+            <Picker Title="Select Mood" 
+                    ItemsSource="{Binding MoodValues}" 
+                    SelectedItem="{Binding SelectedMoodName}"/>
+        </VerticalStackLayout>
+
+        <!-- Editor (Left) -->
+        <Editor Grid.Row="1" 
+                Grid.Column="0"
+                Placeholder="Write your journal here... (Markdown supported)"
+                Text="{Binding Content}"
+                AutoSize="TextChanges"/>
+
+        <!-- Preview (Right) -->
+        <ScrollView Grid.Row="1" Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#F3F4F6, Dark=#1F2937}" Padding="10">
+            <Label TextType="Html" Text="{Binding HtmlPreview}" />
+        </ScrollView>
+        
+        <!-- Toolbar Items -->
+        <ContentPage.ToolbarItems>
+            <ToolbarItem Text="Save" Command="{Binding SaveCommand}" />
+        </ContentPage.ToolbarItems>
+
+    </Grid>
+
+</ContentPage>

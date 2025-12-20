@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SecureDailyJournal.ViewModels"
+             x:Class="SecureDailyJournal.Views.LoginPage"
+             Title="Login">
+
+    <Grid RowDefinitions="*,Auto" Padding="30" BackgroundColor="{AppThemeBinding Light=#F3F4F6, Dark=#1F2937}">
+        
+        <VerticalStackLayout Spacing="20" VerticalOptions="Center">
+            <Label Text="🔒" FontSize="60" HorizontalOptions="Center" />
+            <Label Text="{Binding TitleText}" 
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+            
+            <Label Text="{Binding StatusMessage}" 
+                   FontSize="16" 
+                   TextColor="Gray" 
+                   HorizontalOptions="Center"/>
+
+            <Label Text="{Binding Pin}" 
+                   FontSize="40" 
+                   HorizontalOptions="Center" 
+                   TextColor="{AppThemeBinding Light=#4B5563, Dark=#9CA3AF}"
+                   LetterSpacing="10">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding Pin.Length}" Value="0">
+                        <Setter Property="Text" Value="____" />
+                    </DataTrigger>
+                     <DataTrigger TargetType="Label" Binding="{Binding Pin.Length}" Value="1">
+                        <Setter Property="Text" Value="•___" />
+                    </DataTrigger>
+                     <DataTrigger TargetType="Label" Binding="{Binding Pin.Length}" Value="2">
+                        <Setter Property="Text" Value="••__" />
+                    </DataTrigger>
+                     <DataTrigger TargetType="Label" Binding="{Binding Pin.Length}" Value="3">
+                        <Setter Property="Text" Value="•••_" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Label" Binding="{Binding Pin.Length}" Value="4">
+                        <Setter Property="Text" Value="••••" />
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+
+            <!-- Keypad -->
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*,*" RowSpacing="15" ColumnSpacing="15" WidthRequest="300">
+                <Button Text="1" Command="{Binding AddDigitCommand}" CommandParameter="1" Style="{StaticResource KeypadButton}"/>
+                <Button Text="2" Command="{Binding AddDigitCommand}" CommandParameter="2" Grid.Column="1" Style="{StaticResource KeypadButton}"/>
+                <Button Text="3" Command="{Binding AddDigitCommand}" CommandParameter="3" Grid.Column="2" Style="{StaticResource KeypadButton}"/>
+
+                <Button Text="4" Command="{Binding AddDigitCommand}" CommandParameter="4" Grid.Row="1" Style="{StaticResource KeypadButton}"/>
+                <Button Text="5" Command="{Binding AddDigitCommand}" CommandParameter="5" Grid.Row="1" Grid.Column="1" Style="{StaticResource KeypadButton}"/>
+                <Button Text="6" Command="{Binding AddDigitCommand}" CommandParameter="6" Grid.Row="1" Grid.Column="2" Style="{StaticResource KeypadButton}"/>
+
+                <Button Text="7" Command="{Binding AddDigitCommand}" CommandParameter="7" Grid.Row="2" Style="{StaticResource KeypadButton}"/>
+                <Button Text="8" Command="{Binding AddDigitCommand}" CommandParameter="8" Grid.Row="2" Grid.Column="1" Style="{StaticResource KeypadButton}"/>
+                <Button Text="9" Command="{Binding AddDigitCommand}" CommandParameter="9" Grid.Row="2" Grid.Column="2" Style="{StaticResource KeypadButton}"/>
+
+                <Button Text="C" Command="{Binding ClearCommand}" Grid.Row="3" BackgroundColor="#EF4444" TextColor="White" CornerRadius="30" HeightRequest="60" WidthRequest="60" FontSize="20"/>
+                <Button Text="0" Command="{Binding AddDigitCommand}" CommandParameter="0" Grid.Row="3" Grid.Column="1" Style="{StaticResource KeypadButton}"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Grid>
+    
+    <ContentPage.Resources>
+        <Style x:Key="KeypadButton" TargetType="Button">
+            <Setter Property="CornerRadius" Value="30"/>
+            <Setter Property="HeightRequest" Value="60"/>
+            <Setter Property="WidthRequest" Value="60"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light=White, Dark=#374151}"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White}"/>
+            <Setter Property="Shadow">
+                <Shadow Brush="Black" Offset="0,2" Opacity="0.1"/>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+</ContentPage>

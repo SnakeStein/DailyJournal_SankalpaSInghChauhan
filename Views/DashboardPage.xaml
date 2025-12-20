@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SecureDailyJournal.ViewModels"
+             xmlns:models="clr-namespace:SecureDailyJournal.Models"
+             x:Class="SecureDailyJournal.Views.DashboardPage"
+             Title="Dashboard">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"
+                                        xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"/>
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Greeting & Quick Action -->
+            <Frame BackgroundColor="{AppThemeBinding Light=#BFDBFE, Dark=#1E3A8A}" CornerRadius="15" Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding Greeting}" FontSize="24" FontAttributes="Bold" />
+                    <Label Text="{Binding TodayStatus}" FontSize="16" />
+                    <Button Text="{Binding TodayButtonText}" 
+                            Command="{Binding OpenTodayEntryCommand}"
+                            BackgroundColor="{AppThemeBinding Light=White, Dark=#1F2937}"
+                            TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                            FontAttributes="Bold"
+                            CornerRadius="20"
+                            Margin="0,10,0,0"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Recent Entries -->
+            <Label Text="Recent Entries" FontSize="20" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <CollectionView ItemsSource="{Binding RecentEntries}" HeightRequest="300">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:JournalEntry">
+                        <Frame Margin="0,5" Padding="15" CornerRadius="10" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DashboardViewModel}}, Path=OpenEntryCommand}" CommandParameter="{Binding .}"/>
+                            </Frame.GestureRecognizers>
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                                <Label Text="{Binding EntryDate, StringFormat='{0:MMM dd}'}" 
+                                       FontSize="16" FontAttributes="Bold" 
+                                       VerticalOptions="Center" 
+                                       TextColor="{AppThemeBinding Light=#2563EB, Dark=#60A5FA}"
+                                       HorizontalOptions="Center"
+                                       WidthRequest="50"/>
+                                
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" LineBreakMode="TailTruncation"/>
+                                    <Label Text="{Binding Content}" FontSize="12" TextColor="Gray" LineBreakMode="TailTruncation"/>
+                                    <Label Text="{Binding PrimaryMood}" FontSize="12" TextColor="{AppThemeBinding Light=#4B5563, Dark=#9CA3AF}"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

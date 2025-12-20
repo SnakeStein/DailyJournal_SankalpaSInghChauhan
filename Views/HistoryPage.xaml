@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SecureDailyJournal.ViewModels"
+             xmlns:models="clr-namespace:SecureDailyJournal.Models"
+             x:Class="SecureDailyJournal.Views.HistoryPage"
+             Title="History">
+
+    <ContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"
+                                        xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"/>
+    </ContentPage.Behaviors>
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Filters Header -->
+        <VerticalStackLayout Padding="10" Spacing="10" BackgroundColor="{AppThemeBinding Light=#F3F4F6, Dark=#1F2937}">
+            <SearchBar Placeholder="Search entries..." Text="{Binding SearchText}" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}"/>
+            
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                <HorizontalStackLayout Spacing="10">
+                    <Picker Title="Mood" ItemsSource="{Binding MoodOptions}" SelectedItem="{Binding SelectedMood}" WidthRequest="150" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}"/>
+                    <DatePicker Date="{Binding StartDate}" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}"/>
+                    <Label Text="to" VerticalOptions="Center"/>
+                    <DatePicker Date="{Binding EndDate}" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}"/>
+                </HorizontalStackLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+
+        <!-- Entries List -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding FilteredEntries}" Padding="10">
+            <CollectionView.EmptyView>
+                <Label Text="No entries found" HorizontalOptions="Center" VerticalOptions="Center" Margin="0,50,0,0"/>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:JournalEntry">
+                    <Frame Margin="0,5" Padding="15" CornerRadius="10" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HistoryViewModel}}, Path=OpenEntryCommand}" CommandParameter="{Binding .}"/>
+                        </Frame.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="15">
+                            <VerticalStackLayout WidthRequest="60" VerticalOptions="Center">
+                                <Label Text="{Binding EntryDate, StringFormat='{0:MMM}'}" FontSize="14" HorizontalOptions="Center" TextColor="Gray"/>
+                                <Label Text="{Binding EntryDate, StringFormat='{0:dd}'}" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{AppThemeBinding Light=#2563EB, Dark=#60A5FA}"/>
+                                <Label Text="{Binding EntryDate, StringFormat='{0:ddd}'}" FontSize="12" HorizontalOptions="Center" TextColor="Gray"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding Title}" FontSize="16" FontAttributes="Bold" LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding Content}" FontSize="12" TextColor="Gray" LineBreakMode="TailTruncation"/>
+                                <Label Text="{Binding PrimaryMood}" FontSize="12" TextColor="{AppThemeBinding Light=#4B5563, Dark=#9CA3AF}"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>

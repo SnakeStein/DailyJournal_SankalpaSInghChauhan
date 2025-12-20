@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SecureDailyJournal.ViewModels"
+             x:Class="SecureDailyJournal.Views.SettingsPage"
+             Title="Settings">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="25">
+            
+            <!-- Appearance -->
+            <Label Text="Appearance" FontSize="18" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1E3A8A, Dark=#60A5FA}"/>
+            <Frame Padding="15" CornerRadius="10" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}">
+                <Grid ColumnDefinitions="*, Auto">
+                    <VerticalStackLayout>
+                        <Label Text="Dark Mode" VerticalOptions="Center" FontSize="16"/>
+                        <Label Text="Switch between Light and Dark themes" FontSize="12" TextColor="Gray"/>
+                    </VerticalStackLayout>
+                    <Switch IsToggled="{Binding IsDarkTheme}" Grid.Column="1" VerticalOptions="Center"/>
+                </Grid>
+            </Frame>
+
+            <!-- Export -->
+            <Label Text="Data Export" FontSize="18" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1E3A8A, Dark=#60A5FA}"/>
+            <Frame Padding="15" CornerRadius="10" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Export to PDF" FontSize="16" FontAttributes="Bold"/>
+                    <Label Text="Select date range to export your journal entries." FontSize="14" TextColor="Gray"/>
+
+                    <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto" ColumnSpacing="15" RowSpacing="5">
+                        <Label Text="Start Date" FontSize="12"/>
+                        <Label Text="End Date" Grid.Column="1" FontSize="12"/>
+                        
+                        <DatePicker Date="{Binding StartDate}" Grid.Row="1"/>
+                        <DatePicker Date="{Binding EndDate}" Grid.Row="1" Grid.Column="1"/>
+                    </Grid>
+
+                    <Button Text="Export PDF" 
+                            Command="{Binding ExportPdfCommand}" 
+                            BackgroundColor="{AppThemeBinding Light=#2563EB, Dark=#3B82F6}" 
+                            TextColor="White"
+                            CornerRadius="20"
+                            FontAttributes="Bold"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- About -->
+            <Label Text="About" FontSize="18" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1E3A8A, Dark=#60A5FA}"/>
+            <Frame Padding="15" CornerRadius="10" BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Secure Daily Journal" FontSize="16" FontAttributes="Bold"/>
+                    <Label Text="Version 1.0.0" FontSize="14" TextColor="Gray"/>
+                    <Label Text="Secure, Local, Offline-First." FontSize="14" TextColor="Gray"/>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
