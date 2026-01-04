@@ -1,0 +1,38 @@
+# .NET Core
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# MAUI
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.deployment
+AppPackages/
+BundleArtifacts/
+PlatformData/
+
+# Build logs
+build_log*.txt
+build_output.txt
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# macOS
+.DS_Store

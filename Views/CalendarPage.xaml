@@ -10,44 +10,62 @@
                                         xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"/>
     </ContentPage.Behaviors>
 
-    <Grid RowDefinitions="Auto, *">
+    <Grid RowDefinitions="Auto, Auto, *">
         <!-- Header -->
-        <Grid ColumnDefinitions="Auto, *, Auto" Padding="20">
-            <Button Text="&lt;" Command="{Binding PrevMonthCommand}" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="20"/>
-            <Label Text="{Binding MonthName}" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1"/>
-            <Button Text="&gt;" Command="{Binding NextMonthCommand}" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=Black, Dark=White}" FontSize="20" Grid.Column="2"/>
+        <Grid ColumnDefinitions="*, Auto" Padding="20,20,20,10">
+            <Label Text="{Binding MonthName}" FontSize="24" FontAttributes="Bold" VerticalOptions="Center" TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+            
+            <HorizontalStackLayout Grid.Column="1" Spacing="15">
+                <Button Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" 
+                        Command="{Binding PrevMonthCommand}" 
+                        BackgroundColor="Transparent" 
+                        TextColor="Gray" 
+                        FontSize="18"
+                        WidthRequest="40" HeightRequest="40"/>
+                <Button Text="&#xE72A;" FontFamily="Segoe MDL2 Assets" 
+                        Command="{Binding NextMonthCommand}" 
+                        BackgroundColor="Transparent" 
+                        TextColor="Gray" 
+                        FontSize="18"
+                        WidthRequest="40" HeightRequest="40"/>
+            </HorizontalStackLayout>
+        </Grid>
+
+        <!-- Weekday Headers -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*,*,*,*" Padding="10,0" Margin="0,0,0,10">
+            <Label Text="S" HorizontalOptions="Center" TextColor="Gray" FontSize="14"/>
+            <Label Text="M" HorizontalOptions="Center" TextColor="Gray" FontSize="14" Grid.Column="1"/>
+            <Label Text="T" HorizontalOptions="Center" TextColor="Gray" FontSize="14" Grid.Column="2"/>
+            <Label Text="W" HorizontalOptions="Center" TextColor="Gray" FontSize="14" Grid.Column="3"/>
+            <Label Text="T" HorizontalOptions="Center" TextColor="Gray" FontSize="14" Grid.Column="4"/>
+            <Label Text="F" HorizontalOptions="Center" TextColor="Gray" FontSize="14" Grid.Column="5"/>
+            <Label Text="S" HorizontalOptions="Center" TextColor="Gray" FontSize="14" Grid.Column="6"/>
         </Grid>
 
         <!-- Calendar Grid -->
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Days}">
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Days}">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="7" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Padding="5" HeightRequest="80">
+                    <Grid Padding="2" HeightRequest="50" WidthRequest="50">
                          <Grid.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CalendarViewModel}}, Path=DayTappedCommand}" CommandParameter="{Binding .}"/>
                         </Grid.GestureRecognizers>
                         
-                        <Border StrokeShape="RoundRectangle 10" 
-                                BackgroundColor="{AppThemeBinding Light=White, Dark=#374151}"
-                                Opacity="{Binding IsCurrentMonth, Converter={StaticResource BoolToOpacityConverter}}"> <!-- Assuming converter or just ignore opacity -->
-                                <!-- Let's remove Opacity binding for simplicity directly and use triggers if needed, but simple is fine -->
-                            <Grid>
-                                <Label Text="{Binding DisplayText}" 
-                                       HorizontalOptions="Center" 
-                                       VerticalOptions="Center" 
-                                       FontSize="16"
-                                       TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
-                                
-                                <BoxView HeightRequest="8" WidthRequest="8" 
-                                         CornerRadius="4" 
-                                         Color="{Binding IndicatorColor}" 
-                                         VerticalOptions="End" 
-                                         HorizontalOptions="Center" 
-                                         Margin="0,0,0,10"/>
-                            </Grid>
+                        <Border StrokeShape="RoundRectangle 25" 
+                                StrokeThickness="0"
+                                BackgroundColor="{Binding BackgroundColor}"
+                                HeightRequest="50"
+                                WidthRequest="50"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center">
+                            <Label Text="{Binding DisplayText}" 
+                                   HorizontalOptions="Center" 
+                                   VerticalOptions="Center" 
+                                   FontSize="14"
+                                   TextColor="{Binding TextColor}"/>
                         </Border>
                     </Grid>
                 </DataTemplate>
